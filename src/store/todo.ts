@@ -1,6 +1,12 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
+import {
+  Module,
+  VuexModule,
+  Mutation,
+  Action,
+  getModule,
+} from "vuex-module-decorators";
 import store from "@/store";
 
 Vue.use(Vuex);
@@ -11,8 +17,19 @@ export type ITodo = {
 };
 
 @Module({ dynamic: true, namespaced: true, name: "todo", store })
-export default class TodoModule extends VuexModule {
-  todos: Map<number, ITodo> = new Map();
+class Todo extends VuexModule {
+  private todos: Map<number, ITodo> = new Map([
+    [1, { isCompleted: false, task: "besan lagana hai" }],
+  ]);
+
+  /* ----------------------------- CUSTOM GETTERS ----------------------------- */
+  //   get todoData() {
+  //     let r: [{...ITodo; id: number }];
+  //     for (const v of this.todos) {
+  //       r.push({ task: v[1].task, isCompleted: v[1].isCompleted, id: v[0] });
+  //     }
+  //     return r;
+  //   }
 
   /* -------------------------------------------------------------------------- */
   /*                                  MUTATION                                  */
@@ -66,3 +83,5 @@ export default class TodoModule extends VuexModule {
     return null;
   }
 }
+
+export default getModule(Todo);
