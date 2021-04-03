@@ -20,6 +20,7 @@ import { Component, Vue } from "vue-property-decorator";
 export default class TodoInput extends Vue {
   a = "";
   tasks = ["123", "321"];
+
   isRed() {
     if (this.a.length > 10) {
       return true;
