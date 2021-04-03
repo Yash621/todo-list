@@ -26,9 +26,17 @@ class Todo extends VuexModule {
 
   /* ----------------------------- CUSTOM GETTERS ----------------------------- */
   get todoData() {
-    const data = new Array<{ task: string; isCompleted: boolean; id: string }>();
+    const data = new Array<{
+      task: string;
+      isCompleted: boolean;
+      id: string;
+    }>();
     for (const todo of this.todos) {
-      data.push({ task: todo[1].task, isCompleted: todo[1].isCompleted, id: todo[0] });
+      data.push({
+        task: todo[1].task,
+        isCompleted: todo[1].isCompleted,
+        id: todo[0],
+      });
     }
     return data;
   }

@@ -4,7 +4,7 @@
     <div :class="`${isRed() ? 'redText' : 'greenText'}`">
       {{ msg }}
     </div>
-    <fieldset style="width:25vw">
+    <fieldset style="width: 25vw">
       <input v-model="msg" />
     </fieldset>
     <button v-on:click="addTask">SENPAI NOTICE ME</button>
@@ -31,7 +31,7 @@ export default class TodoInput extends Vue {
     }
   }
   addTask() {
-    console.log('yo');
+    console.log("yo");
     todo.addTask(this.msg);
   }
 }
@@ -44,7 +44,7 @@ export default class TodoInput extends Vue {
 .greenText {
   color: green;
 }
-.centerGrid{
+.centerGrid {
   display: grid;
   gap: 1rem;
   place-items: center;
