@@ -2,24 +2,26 @@
   <div>
     <h1>hello my bakchod friends</h1>
     <div :class="`${isRed() ? 'redText' : 'greenText'}`">
-      {{ a }}
+      {{ msg }}
     </div>
     <fieldset>
-      <input v-model="a" />
+      <input v-model="msg" />
     </fieldset>
-    <div v-for="task in tasks" :key="task">
-      {{ task }}
+    <button v-on:click="addTask"></button>
+    <div v-for="task in tasks" :key="task.id">
+      {{ task.task }}
     </div>
   </div>
 </template>
 
 <script>
+import todo from "@/store/modules/todo";
 import { Component, Vue } from "vue-property-decorator";
 
 @Component
 export default class TodoInput extends Vue {
-  a = "";
-  tasks = ["123", "321"];
+  msg = "";
+  tasks = todo.todoData;
 
   isRed() {
     if (this.a.length > 10) {
@@ -27,6 +29,9 @@ export default class TodoInput extends Vue {
     } else {
       return false;
     }
+  }
+  addTask() {
+    todo.addTask();
   }
 }
 </script>

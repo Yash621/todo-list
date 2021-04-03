@@ -8,6 +8,8 @@ import {
   getModule,
 } from "vuex-module-decorators";
 import store from "@/store";
+import { MODULE_NAMES } from "./constants";
+import { fun } from "@/utils/str-to-num-hash";
 
 Vue.use(Vuex);
 
@@ -16,20 +18,20 @@ export type ITodo = {
   isCompleted: boolean;
 };
 
-@Module({ dynamic: true, namespaced: true, name: "todo", store })
+@Module({ dynamic: true, namespaced: true, name: MODULE_NAMES.todo, store })
 class Todo extends VuexModule {
-  private todos: Map<number, ITodo> = new Map([
-    [1, { isCompleted: false, task: "besan lagana hai" }],
+  private todos: Map<string, ITodo> = new Map([
+    ["1", { isCompleted: false, task: "besan lagana hai" }],
   ]);
 
   /* ----------------------------- CUSTOM GETTERS ----------------------------- */
-  //   get todoData() {
-  //     let r: [{...ITodo; id: number }];
-  //     for (const v of this.todos) {
-  //       r.push({ task: v[1].task, isCompleted: v[1].isCompleted, id: v[0] });
-  //     }
-  //     return r;
-  //   }
+  get todoData() {
+    const r = new Array<{ task: string; isCompleted: boolean; id: number }>();
+    for (const v of this.todos) {
+      r.push({ task: v[1].task, isCompleted: v[1].isCompleted, id: v[0] });
+    }
+    return r;
+  }
 
   /* -------------------------------------------------------------------------- */
   /*                                  MUTATION                                  */
@@ -37,13 +39,16 @@ class Todo extends VuexModule {
 
   /* ------------------------------- ADDING TASK ------------------------------ */
   @Mutation
-  private ADD_TASK(payload: { task: string; id: number }) {
-    this.todos.set(payload.id, { task: payload.task, isCompleted: false });
+  private ADD_TASK(payload: { task: string; id: string }) {
+    this.todos.set(payload.id, {
+      task: payload.task,
+      isCompleted: false,
+    });
   }
 
   /* ------------------------------ UPDATING TASK ----------------------------- */
   @Mutation
-  private UPDATE_TASK(id: number, payload?: ITodo) {
+  private UPDATE_TASK(id: string, payload?: ITodo) {
     const oldTodo = this.todos.get(id);
     if (!oldTodo) {
       console.log("please provide a valid id");
@@ -57,7 +62,7 @@ class Todo extends VuexModule {
 
   /* -------------------------------- DELETION -------------------------------- */
   @Mutation
-  private DELETE_TASK(id: number) {
+  private DELETE_TASK(id: string) {
     this.todos.delete(id);
   }
 
@@ -66,8 +71,10 @@ class Todo extends VuexModule {
   /* -------------------------------------------------------------------------- */
 
   /* ------------------------------- ADDING TASK ------------------------------ */
-  @Action({ commit: "ADD_TASK" })
-  async addTask(): Promise<null> {
+  @Action
+  async addTask(input: string): Promise<null> {
+    const id = await fun(input);
+    this.ADD_TASK({ id: id.toString(), task: input });
     return null;
   }
 
