@@ -26,11 +26,11 @@ class Todo extends VuexModule {
 
   /* ----------------------------- CUSTOM GETTERS ----------------------------- */
   get todoData() {
-    const r = new Array<{ task: string; isCompleted: boolean; id: number }>();
-    for (const v of this.todos) {
-      r.push({ task: v[1].task, isCompleted: v[1].isCompleted, id: v[0] });
+    const data = new Array<{ task: string; isCompleted: boolean; id: string }>();
+    for (const todo of this.todos) {
+      data.push({ task: todo[1].task, isCompleted: todo[1].isCompleted, id: todo[0] });
     }
-    return r;
+    return data;
   }
 
   /* -------------------------------------------------------------------------- */
@@ -74,7 +74,7 @@ class Todo extends VuexModule {
   @Action
   async addTask(input: string): Promise<null> {
     const id = await fun(input);
-    this.ADD_TASK({ id: id.toString(), task: input });
+    this.ADD_TASK({ id: id, task: input });
     return null;
   }
 

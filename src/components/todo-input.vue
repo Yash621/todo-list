@@ -1,13 +1,13 @@
 <template>
-  <div>
-    <h1>hello my bakchod friends</h1>
+  <div class="centerGrid">
+    <h1>helu mic test 123</h1>
     <div :class="`${isRed() ? 'redText' : 'greenText'}`">
       {{ msg }}
     </div>
-    <fieldset>
+    <fieldset style="width:25vw">
       <input v-model="msg" />
     </fieldset>
-    <button v-on:click="addTask"></button>
+    <button v-on:click="addTask">SENPAI NOTICE ME</button>
     <div v-for="task in tasks" :key="task.id">
       {{ task.task }}
     </div>
@@ -24,14 +24,15 @@ export default class TodoInput extends Vue {
   tasks = todo.todoData;
 
   isRed() {
-    if (this.a.length > 10) {
+    if (this.msg.length > 10) {
       return true;
     } else {
       return false;
     }
   }
   addTask() {
-    todo.addTask();
+    console.log('yo');
+    todo.addTask(this.msg);
   }
 }
 </script>
@@ -42,5 +43,10 @@ export default class TodoInput extends Vue {
 }
 .greenText {
   color: green;
+}
+.centerGrid{
+  display: grid;
+  gap: 1rem;
+  place-items: center;
 }
 </style>
