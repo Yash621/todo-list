@@ -14,29 +14,40 @@
   </div>
 </template>
 
-<script>
-import todo from "@/store/modules/todo";
-import { Component, Vue } from "vue-property-decorator";
+<script lang="ts">
+import Todo from "@/store/modules/todo";
+import { ref, reactive, computed, defineComponent } from "@vue/composition-api";
+export default defineComponent({
+  setup() {
+    /* ----------------------------------- MSG ---------------------------------- */
 
-@Component
-export default class TodoInput extends Vue {
-  msg = "";
-  tasks = todo.todoData;
+    // DATA
+    const msg = ref(""); // Primitives - String, Number, Array
+    const obj = reactive({
+      name: "",
+      age: 0,
+    }); // Objects
 
-  isRed() {
-    if (this.msg.length > 10) {
-      return true;
-    } else {
-      return false;
+    // Computed
+    const tasks = computed(() => Todo.todoData);
+
+    // Methods
+    function isRed() {
+      if (msg.value.length > 10) {
+        return true;
+      } else {
+        return false;
+      }
     }
-  }
-  addTask() {
-    console.log("yo");
-    todo.addTask(this.msg);
-  }
-}
-</script>
+    function addTask() {
+      console.log("yo");
+      Todo.addTask(msg.value);
+    }
 
+    return { msg, obj, tasks, isRed, addTask };
+  },
+});
+</script>
 <style>
 .redText {
   color: red;
