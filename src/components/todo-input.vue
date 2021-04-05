@@ -7,9 +7,11 @@
     <fieldset style="width: 25vw">
       <input v-model="msg" />
     </fieldset>
-    <button v-on:click="addTask">SENPAI NOTICE ME</button>
+    <button v-on:click="addTask(msg)">SENPAI NOTICE ME</button>
     <div v-for="task in tasks" :key="task.id">
       {{ task.task }}
+      <button v-on:click="deleteTask(task.id)">Delete</button>
+      <button v-on:click="updateTask(task.id, true)">completed</button>
     </div>
   </div>
 </template>
@@ -40,14 +42,21 @@ export default defineComponent({
       }
     }
     function addTask() {
-      console.log("yo");
       Todo.addTask(msg.value);
     }
+    function deleteTask(id: string) {
+      Todo.deleteTask(id);
+    }
+    function updateTask(id: string, isCompleted?: boolean, task?: string) {
+      const payload = { task: task, isCompleted: isCompleted, id: id };
+      Todo.updateTask(payload);
+    }
 
-    return { msg, obj, tasks, isRed, addTask };
+    return { msg, obj, tasks, isRed, addTask, deleteTask, updateTask };
   },
 });
 </script>
+
 <style>
 .redText {
   color: red;

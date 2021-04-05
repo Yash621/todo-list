@@ -56,14 +56,14 @@ class Todo extends VuexModule {
 
   /* ------------------------------ UPDATING TASK ----------------------------- */
   @Mutation
-  private UPDATE_TASK(id: string, payload?: ITodo) {
+  private UPDATE_TASK(id: string, isCompleted?: boolean, task?: string) {
     const oldTodo = this.todos.get(id);
     if (!oldTodo) {
       console.log("please provide a valid id");
     } else {
       this.todos.set(id, {
-        isCompleted: payload?.isCompleted || oldTodo.isCompleted,
-        task: payload?.task || oldTodo.task,
+        isCompleted: isCompleted || oldTodo.isCompleted,
+        task: task || oldTodo.task,
       });
     }
   }
@@ -87,14 +87,20 @@ class Todo extends VuexModule {
   }
 
   /* ------------------------------- UPDATE TASK ------------------------------ */
-  @Action({ commit: "UPDATE_TASK" })
-  async updateTask(): Promise<null> {
+  @Action
+  async updateTask(payload: {
+    id: string;
+    isCompleted?: boolean;
+    task?: string;
+  }): Promise<null> {
+    this.context.commit("UPDATE_TASK", payload);
     return null;
   }
 
   /* ------------------------------- DELETE TASK ------------------------------ */
-  @Action({ commit: "DELETE_TASK" })
-  async deleteTask(): Promise<null> {
+  @Action
+  async deleteTask(id: string): Promise<null> {
+    this.context.commit("DELETE_TASK", { id });
     return null;
   }
 }
