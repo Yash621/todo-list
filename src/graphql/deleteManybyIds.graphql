@@ -1,5 +1,0 @@
-mutation delete(Inputs$:[String]){
-    deleteMany(payload:$Inputs){
-      
-    }
-}

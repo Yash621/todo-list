@@ -1,0 +1,3 @@
+mutation deleteMany($Inputs: [String]) {
+  deleteMany(IdsInput: $Inputs)
+}

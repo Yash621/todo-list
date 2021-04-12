@@ -1,9 +1,0 @@
-mutation update(Inputs$:UpdateTodoInput){
-   updateOne(payload:Inputs$){
-      id 
-      isCompleted
-      task
-   }
-
-
-}

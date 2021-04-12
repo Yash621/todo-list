@@ -1,4 +1,4 @@
-query {
+query findAll {
   findAll {
     task
     isCompleted

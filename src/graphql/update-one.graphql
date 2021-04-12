@@ -1,0 +1,7 @@
+mutation updateOne($Inputs: UpdateTodoInput) {
+  updateOne(UpdateTodoInput: $Inputs) {
+    id
+    isCompleted
+    task
+  }
+}

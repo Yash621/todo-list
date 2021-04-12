@@ -1,5 +1,5 @@
-mutation create(payload$:TodoInput){
-  createTodo(TodoInput:payload$) {
+mutation createTodo($payload: TodoInput) {
+  createTodo(TodoInput: $payload) {
     task
     id
     isCompleted
