@@ -1,0 +1,6 @@
+query findOneById($id: String!) {
+  findOne(id: $id) {
+    task
+    isCompleted
+  }
+}

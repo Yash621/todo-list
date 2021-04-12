@@ -1,0 +1,6 @@
+query {
+  findAll {
+    task
+    isCompleted
+  }
+}
