@@ -1,4 +1,4 @@
-mutation createTodo($payload: TodoInput) {
+mutation createTodo($payload: TodoInput!) {
   createTodo(TodoInput: $payload) {
     task
     id

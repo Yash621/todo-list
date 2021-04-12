@@ -1,5 +1,5 @@
-mutation updateOne($Inputs: UpdateTodoInput) {
-  updateOne(UpdateTodoInput: $Inputs) {
+mutation updateOne($Input: UpdateTodoInput!) {
+  updateOne(UpdateTodoInput: $Input) {
     id
     isCompleted
     task
