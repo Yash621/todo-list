@@ -50,7 +50,7 @@ export default defineComponent({
     function deleteTask(id: string) {
       Todo.deleteTask(id);
     }
-    function updateTask(id: string, isCompleted?: boolean, task?: string) {
+    function updateTask(id: string) {
       const payload = { isCompleted: true, id: id };
       Todo.updateTask(payload);
     }
