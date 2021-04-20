@@ -1,6 +1,6 @@
 <template>
-  <div class="centerGrid">
-    <h1>Tasks</h1>
+  <div class="centerGrid card card--inverted">
+    <h1>TODO</h1>
     <fieldset>
       <label class="input">
         <input
@@ -12,50 +12,58 @@
         <span class="input__label">Enter the Task</span>
       </label>
     </fieldset>
-    <button v-on:click="addTask(msg)">Add Task</button>
+    <button v-on:click="addTask">ADD</button>
     <div v-for="task in tasks" :key="task.id">
       <p :class="`${task.isCompleted ? 'redText' : 'greenText'}`">
         {{ task.task }}
       </p>
-      <button v-on:click="deleteTask(task.id)">Delete</button>
-      <button v-on:click="updateTask(task.id, true)">completed</button>
+      <a>
+        <button v-on:click="deleteTask(task.id)">DELETE</button>
+        <button v-on:click="completeTask(task)">Done</button>
+      </a>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import Todo from "@/store/modules/todo";
-import { ref, computed, defineComponent } from "@vue/composition-api";
-export default defineComponent({
-  setup() {
-    /* ----------------------------------- MSG ---------------------------------- */
+//LKC:always do this with ts
+import todo from "@/store/modules/todo";
+import { Vue } from "vue-property-decorator";
 
-    // DATA
-    const msg = ref(""); // Primitives - String, Number, Array
-
-    // Computed
-    const tasks = computed(() => Todo.todoData);
-
-    // Methods
-    function isRed() {
-      if (msg.value.length > 10) {
+export default Vue.extend({
+  computed: {
+    tasks() {
+      return todo.todoData;
+    },
+  },
+  data() {
+    return {
+      msg: "",
+    };
+  },
+  methods: {
+    isRed() {
+      console.log(todo.todoData.length);
+      if (this.msg.length > 10) {
         return true;
       } else {
         return false;
       }
-    }
-    function addTask() {
-      Todo.addTask(msg.value);
-    }
-    function deleteTask(id: string) {
-      Todo.deleteTask(id);
-    }
-    function updateTask(id: string, isCompleted?: boolean, task?: string) {
-      const payload = { task: task, isCompleted: isCompleted, id: id };
-      Todo.updateTask(payload);
-    }
-
-    return { msg, tasks, isRed, addTask, deleteTask, updateTask };
+    },
+    addTask() {
+      todo.addTask(this.msg);
+      console.log(todo.todoData.length, "hello from addTask");
+    },
+    deleteTask(id: string) {
+      todo.deleteTask(id);
+    },
+    completeTask(payload: { id: string; task: string }) {
+      todo.updateTask({
+        task: payload.task,
+        isCompleted: true,
+        id: payload.id,
+      });
+    },
   },
 });
 </script>
