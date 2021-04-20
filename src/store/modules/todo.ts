@@ -10,7 +10,6 @@ import {
 import store from "@/store";
 import { MODULE_NAMES } from "./constants";
 import { fun } from "@/utils/str-to-num-hash";
-
 Vue.use(Vuex);
 
 export type ITodo = {
