@@ -1,12 +1,22 @@
 <template>
-  <div class="centerGrid">
+  <div class="centerGrid card card--inverted">
     <h1>Tasks</h1>
-    <fieldset style="width: 25vw">
-      <input v-model="msg" />
+    <fieldset>
+      <label class="input">
+        <input
+          class="input__field"
+          placeholder=" "
+          value="Besan lagana h"
+          v-model="msg"
+        />
+        <span class="input__label">Enter the Task</span>
+      </label>
     </fieldset>
     <button v-on:click="addTask(msg)">Add Task</button>
     <div v-for="task in tasks" :key="task.id">
-      {{ task.task }}
+      <p :class="`${task.isCompleted ? 'redText' : 'greenText'}`">
+        {{ task.task }}
+      </p>
       <button v-on:click="deleteTask(task.id)">Delete</button>
       <button v-on:click="updateTask(task.id, true)">completed</button>
     </div>
