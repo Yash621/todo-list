@@ -10,6 +10,7 @@ import {
 import store from "@/store";
 import { MODULE_NAMES } from "./constants";
 import { fun } from "@/utils/str-to-num-hash";
+import { reactive } from "@vue/composition-api";
 
 Vue.use(Vuex);
 
@@ -20,9 +21,9 @@ export type ITodo = {
 
 @Module({ dynamic: true, namespaced: true, name: MODULE_NAMES.todo, store })
 class Todo extends VuexModule {
-  private todos: Map<string, ITodo> = new Map([
-    ["1", { isCompleted: false, task: "besan lagana hai" }],
-  ]);
+  private todos: Map<string, ITodo> = reactive(
+    new Map([["1", { isCompleted: false, task: "besan lagana hai" }]])
+  );
 
   /* ----------------------------- CUSTOM GETTERS ----------------------------- */
   get todoData() {
