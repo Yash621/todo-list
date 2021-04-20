@@ -21,9 +21,7 @@ export type ITodo = {
 
 @Module({ dynamic: true, namespaced: true, name: MODULE_NAMES.todo, store })
 class Todo extends VuexModule {
-  private todos: Map<string, ITodo> = reactive(
-    new Map([["1", { isCompleted: false, task: "besan lagana hai" }]])
-  );
+  private todos = Object.create({});
 
   /* ----------------------------- CUSTOM GETTERS ----------------------------- */
   get todoData() {
