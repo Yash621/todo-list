@@ -1,5 +1,5 @@
 <template>
-  <div class="centerGrid card card--inverted">
+  <div class="centerGrid">
     <h1>Tasks</h1>
     <fieldset>
       <label class="input">
