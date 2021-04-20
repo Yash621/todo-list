@@ -26,6 +26,10 @@ class Todo extends VuexModule {
     },
   });
 
+  get keys() {
+    return this.todos.keys();
+  }
+
   /* ----------------------------- CUSTOM GETTERS ----------------------------- */
   get todoData() {
     const data = new Array<{
@@ -33,11 +37,11 @@ class Todo extends VuexModule {
       isCompleted: boolean;
       id: string;
     }>();
-    for (const todo of this.todos) {
+    for (const key of this.keys) {
       data.push({
-        task: this.todos[1].task,
-        isCompleted: todo[1].isCompleted,
-        id: todo[0],
+        task: this.todos[key].task,
+        isCompleted: this.todos[key].isCompleted,
+        id: key,
       });
     }
     return data;
@@ -59,11 +63,11 @@ class Todo extends VuexModule {
   /* ------------------------------ UPDATING TASK ----------------------------- */
   @Mutation
   private UPDATE_TASK(id: string, isCompleted?: boolean, task?: string) {
-    const oldTodo = this.todos.get(id);
+    const oldTodo = this.todos[id];
     if (!oldTodo) {
       console.log("please provide a valid id");
     } else {
-      this.todos.set(id, {
+      Vue.set(this.todos, id, {
         isCompleted: isCompleted || oldTodo.isCompleted,
         task: task || oldTodo.task,
       });
@@ -73,7 +77,7 @@ class Todo extends VuexModule {
   /* -------------------------------- DELETION -------------------------------- */
   @Mutation
   private DELETE_TASK(id: string) {
-    this.todos.delete(id);
+    Vue.delete(this.todos, id);
   }
 
   /* -------------------------------------------------------------------------- */
