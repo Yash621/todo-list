@@ -10,7 +10,6 @@ import {
 import store from "@/store";
 import { MODULE_NAMES } from "./constants";
 import { fun } from "@/utils/str-to-num-hash";
-import { reactive } from "@vue/composition-api";
 
 Vue.use(Vuex);
 
@@ -21,7 +20,12 @@ export type ITodo = {
 
 @Module({ dynamic: true, namespaced: true, name: MODULE_NAMES.todo, store })
 class Todo extends VuexModule {
-  private todos = Object.create({});
+  private todos = Object.create({
+    "1": {
+      task: "john-weak ko ghoomne jana hai bina ghar walo ki bakchodi ke!!",
+      isCompleted: false,
+    },
+  });
 
   /* ----------------------------- CUSTOM GETTERS ----------------------------- */
   get todoData() {
@@ -32,7 +36,7 @@ class Todo extends VuexModule {
     }>();
     for (const todo of this.todos) {
       data.push({
-        task: todo[1].task,
+        task: this.todos[1].task,
         isCompleted: todo[1].isCompleted,
         id: todo[0],
       });
@@ -47,7 +51,7 @@ class Todo extends VuexModule {
   /* ------------------------------- ADDING TASK ------------------------------ */
   @Mutation
   private ADD_TASK(payload: { task: string; id: string }) {
-    this.todos.set(payload.id, {
+    Vue.set(this.todos, payload.id, {
       task: payload.task,
       isCompleted: false,
     });
