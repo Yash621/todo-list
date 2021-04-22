@@ -7,6 +7,7 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import TodoInput from "@/components/todo-input.vue";
+import gql from "graphql-tag";
 
 @Component({
   components: {

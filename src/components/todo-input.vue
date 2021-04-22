@@ -18,7 +18,7 @@
         {{ task.task }}
       </p>
       <button v-on:click="deleteTask(task.id)">Delete</button>
-      <button v-on:click="updateTask(task.id)">completed</button>
+      <button v-on:click="updateTask(task)">completed</button>
     </div>
   </div>
 </template>
@@ -50,8 +50,11 @@ export default defineComponent({
     function deleteTask(id: string) {
       Todo.deleteTask(id);
     }
-    function updateTask(id: string) {
-      const payload = { isCompleted: true, id: id };
+    function updateTask(payload: {
+      task: string;
+      isCompleted: boolean;
+      id: string;
+    }) {
       Todo.updateTask(payload);
     }
 

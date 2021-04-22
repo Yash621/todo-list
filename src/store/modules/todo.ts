@@ -10,6 +10,7 @@ import {
 import store from "@/store";
 import { MODULE_NAMES } from "./constants";
 import { fun } from "@/utils/str-to-num-hash";
+
 Vue.use(Vuex);
 
 export type ITodo = {
@@ -25,9 +26,9 @@ class Todo extends VuexModule {
       isCompleted: false,
     },
   });
-
+  
   get keys() {
-    return this.todos.keys();
+    return Object.keys(this.todos);
   }
 
   /* ----------------------------- CUSTOM GETTERS ----------------------------- */
@@ -62,16 +63,15 @@ class Todo extends VuexModule {
 
   /* ------------------------------ UPDATING TASK ----------------------------- */
   @Mutation
-  private UPDATE_TASK(id: string, isCompleted?: boolean, task?: string) {
-    const oldTodo = this.todos[id];
-    if (!oldTodo) {
-      console.log("please provide a valid id");
-    } else {
-      Vue.set(this.todos, id, {
-        isCompleted: isCompleted || oldTodo.isCompleted,
-        task: task || oldTodo.task,
-      });
-    }
+  private UPDATE_TASK(payload: {
+    task: string;
+    isCompleted: boolean;
+    id: string;
+  }) {
+    Vue.set(this.todos, payload.id, {
+      isCompleted: true,
+      task: payload.task,
+    });
   }
 
   /* -------------------------------- DELETION -------------------------------- */
@@ -86,28 +86,29 @@ class Todo extends VuexModule {
 
   /* ------------------------------- ADDING TASK ------------------------------ */
   @Action
-  async addTask(input: string): Promise<null> {
+  async addTask(input: string) {
     const id = await fun(input);
     this.ADD_TASK({ id: id, task: input });
-    return null;
+    this.$apollo.mutate({
+      mutation: 
+      variables:
+    });
   }
 
   /* ------------------------------- UPDATE TASK ------------------------------ */
   @Action
   async updateTask(payload: {
+    task: string;
+    isCompleted: boolean;
     id: string;
-    isCompleted?: boolean;
-    task?: string;
-  }): Promise<null> {
+  }) {
     this.context.commit("UPDATE_TASK", payload);
-    return null;
   }
 
   /* ------------------------------- DELETE TASK ------------------------------ */
   @Action
-  async deleteTask(id: string): Promise<null> {
+  async deleteTask(id: string) {
     this.context.commit("DELETE_TASK", { id });
-    return null;
   }
 }
 
