@@ -10,6 +10,7 @@ import {
 import store from "@/store";
 import { MODULE_NAMES } from "./constants";
 import { fun } from "@/utils/str-to-num-hash";
+import { TodoRepository } from "./repo";
 
 Vue.use(Vuex);
 
@@ -26,7 +27,7 @@ class Todo extends VuexModule {
       isCompleted: false,
     },
   });
-  
+
   get keys() {
     return Object.keys(this.todos);
   }
@@ -67,11 +68,19 @@ class Todo extends VuexModule {
     task: string;
     isCompleted: boolean;
     id: string;
+    error?: boolean;
   }) {
-    Vue.set(this.todos, payload.id, {
-      isCompleted: true,
-      task: payload.task,
-    });
+    if (payload.error) {
+      Vue.set(this.todos, payload.id, {
+        isCompleted: false,
+        task: payload.task,
+      });
+    } else {
+      Vue.set(this.todos, payload.id, {
+        isCompleted: true,
+        task: payload.task,
+      });
+    }
   }
 
   /* -------------------------------- DELETION -------------------------------- */
@@ -86,13 +95,20 @@ class Todo extends VuexModule {
 
   /* ------------------------------- ADDING TASK ------------------------------ */
   @Action
-  async addTask(input: string) {
-    const id = await fun(input);
-    this.ADD_TASK({ id: id, task: input });
-    this.$apollo.mutate({
-      mutation: 
-      variables:
-    });
+  async addTask(payload: { task: string; id?: string; isCompleted: boolean }) {
+    const id = await fun(payload.task);
+    if (payload.id) {
+      this.ADD_TASK({ id: payload.id, task: payload.task });
+    } else {
+      this.ADD_TASK({ id: id, task: payload.task });
+    }
+    const newpayload = { payload: { task: payload.task, isCompleted: false } };
+    const response = await TodoRepository.createTodo(newpayload);
+    if (response.errors?.length != 0) {
+      console.log("error");
+      this.DELETE_TASK(id);
+      return;
+    }
   }
 
   /* ------------------------------- UPDATE TASK ------------------------------ */
@@ -102,13 +118,32 @@ class Todo extends VuexModule {
     isCompleted: boolean;
     id: string;
   }) {
-    this.context.commit("UPDATE_TASK", payload);
+    this.UPDATE_TASK(payload);
+    const response = await TodoRepository.updateTodo(payload);
+    if (response.errors?.length != 0) {
+      console.log("error");
+      const newpayload = {
+        task: payload.task,
+        isCompleted: true,
+        id: payload.id,
+        error: true,
+      };
+      this.UPDATE_TASK(newpayload);
+      return;
+    }
   }
 
   /* ------------------------------- DELETE TASK ------------------------------ */
   @Action
   async deleteTask(id: string) {
-    this.context.commit("DELETE_TASK", { id });
+    const task = this.todos[id];
+    this.DELETE_TASK(id);
+    const response = await TodoRepository.DeleteTodo(id);
+    if (response.errors?.length != 0) {
+      console.log("error");
+      this.ADD_TASK(task);
+      return;
+    }
   }
 }
 

@@ -15,7 +15,7 @@ new Vue({
   render: (h) => h(App),
 }).$mount("#app");
 
-const apolloProvider = new VueApollo({
+export const apolloProvider = new VueApollo({
   defaultClient: new ApolloClient({
     uri: "http://localhost:6969",
   }),
