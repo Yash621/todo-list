@@ -4,14 +4,17 @@ import {
   CreateTodoMutationVariables,
   DeleteOneDocument,
   DeleteOneMutation,
+  DeleteOneMutationVariables,
   FindAllDocument,
   FindOneByIdDocument,
   FindOneByIdQueryVariables,
   UpdateOneDocument,
+  UpdateOneMutation,
+  UpdateOneMutationVariables,
 } from "@/generated/graphql";
 import { apolloProvider } from "@/main";
 
-const yash = apolloProvider.defaultClient;
+const yash = apolloProvider;
 
 export class TodoRepository {
   static findAll() {
@@ -31,7 +34,7 @@ export class TodoRepository {
       variables: { ...params },
     });
   }
-  static DeleteTodo(params: string) {
+  static DeleteTodo(params: DeleteOneMutationVariables) {
     return yash.mutate<DeleteOneMutation>({
       mutation: DeleteOneDocument,
       variables: {
@@ -39,14 +42,8 @@ export class TodoRepository {
       },
     });
   }
-  static updateTodo(params: {
-    task: string;
-    isCompleted: boolean;
-    id: string;
-  }) {
-    return yash.mutate<{
-      TodoInput: { id: string; task: string; isCompleted: boolean };
-    }>({
+  static updateTodo(params: UpdateOneMutationVariables) {
+    return yash.mutate<UpdateOneMutation>({
       mutation: UpdateOneDocument,
       variables: {
         ...params,
