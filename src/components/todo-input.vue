@@ -46,8 +46,7 @@ export default defineComponent({
       }
     }
     function addTask() {
-Todo.addTask({ task: msg.value, isCompleted: false });
-
+      Todo.addTask({ task: msg.value, isCompleted: false });
     }
 
     function deleteTask(id: string) {
@@ -58,8 +57,11 @@ Todo.addTask({ task: msg.value, isCompleted: false });
       isCompleted: boolean;
       id: string;
     }) {
-Todo.updateTask({ task: payload.task, isCompleted: true, id: payload.id, });
-
+      Todo.updateTask({
+        task: payload.task,
+        isCompleted: true,
+        id: payload.id,
+      });
     }
 
     return { msg, tasks, isRed, addTask, deleteTask, updateTask };
