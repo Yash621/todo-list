@@ -11,39 +11,38 @@ import { apolloProvider } from "@/main";
 const yash = apolloProvider.defaultClient;
 
 export class TodoRepository {
-  static async findAll() {
-    await yash.query({
+  static findAll() {
+    return yash.query({
       query: FindAllDocument,
     });
   }
-
-  static async findOneById(id: string) {
-    await yash.query({
+  static findOneById(params: string) {
+    return yash.query({
       query: FindOneByIdDocument,
       variables: {
-        id: id,
+        id: params,
       },
     });
   }
-  static async createTodo(params: CreateTodoMutationVariables) {
-    return await yash.mutate<{
+  static createTodo(params: CreateTodoMutationVariables) {
+    return yash.mutate<{
       TodoInput: { id: string; task: string; isCompleted: boolean };
     }>({
       mutation: CreateTodoDocument,
       variables: { ...params },
     });
   }
-  static async DeleteTodo(id: string) {
+  static DeleteTodo(params: string) {
     return yash.mutate<{
       Todo: { id: string; task: string; isCompleted: boolean };
     }>({
       mutation: DeleteOneDocument,
       variables: {
-        id: id,
+        id: params,
       },
     });
   }
-  static async updateTodo(params: {
+  static updateTodo(params: {
     task: string;
     isCompleted: boolean;
     id: string;
