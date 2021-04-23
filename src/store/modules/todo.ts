@@ -68,19 +68,11 @@ class Todo extends VuexModule {
     task: string;
     isCompleted: boolean;
     id: string;
-    error?: boolean;
   }) {
-    if (payload.error) {
-      Vue.set(this.todos, payload.id, {
-        isCompleted: false,
-        task: payload.task,
-      });
-    } else {
-      Vue.set(this.todos, payload.id, {
-        isCompleted: true,
-        task: payload.task,
-      });
-    }
+    Vue.set(this.todos, payload.id, {
+      isCompleted: payload.isCompleted,
+      task: payload.task,
+    });
   }
 
   /* -------------------------------- DELETION -------------------------------- */
@@ -122,13 +114,8 @@ class Todo extends VuexModule {
     const response = await TodoRepository.updateTodo(payload);
     if (response.errors?.length != 0) {
       console.log("error");
-      const newpayload = {
-        task: payload.task,
-        isCompleted: true,
-        id: payload.id,
-        error: true,
-      };
-      this.UPDATE_TASK(newpayload);
+      const { isCompleted, ...data } = payload;
+      this.UPDATE_TASK({ isCompleted: !isCompleted, ...data });
       return;
     }
   }
