@@ -14,7 +14,7 @@ import {
 } from "@/generated/graphql";
 import { apolloProvider } from "@/main";
 
-const yash = apolloProvider;
+const yash = apolloProvider.defaultClient;
 
 export class TodoRepository {
   static findAll() {

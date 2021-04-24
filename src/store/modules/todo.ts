@@ -15,6 +15,7 @@ import { TodoRepository } from "./repo";
 Vue.use(Vuex);
 
 export type ITodo = {
+  id: string;
   task: string;
   isCompleted: boolean;
 };
@@ -87,21 +88,26 @@ class Todo extends VuexModule {
 
   /* ------------------------------- ADDING TASK ------------------------------ */
   @Action
-  async addTask(payload: { task: string; id?: string; isCompleted: boolean }) {
-    const newpayload = { payload: { task: payload.task, isCompleted: false } };
-    if (payload.id) {
-      const response = await TodoRepository.createTodo(newpayload);
-      if (response.errors?.length != 0) {
-        console.log("error");
-        return;
-      }
-      if (response.data)
-        this.ADD_TASK({ id: response.data.createTodo.id, task: payload.task });
-    } else {
-      if (payload.id) {
-        this.ADD_TASK({ id: payload.id, task: payload.task });
-      }
-    }
+  async addTask(payload: { task: string; isCompleted: boolean }) {
+    const response = await TodoRepository.createTodo({ payload: payload });
+    //TODO: handle errors
+    if (response.data)
+      this.ADD_TASK({
+        id: response.data?.createTodo.id.toString(),
+        task: payload.task,
+      });
+  }
+
+  @Action
+  async addTaskById(payload: {
+    task: string;
+    id: string;
+    isCompleted: boolean;
+  }) {
+    this.ADD_TASK({
+      id: payload.id,
+      task: payload.task,
+    });
   }
 
   /* ------------------------------- UPDATE TASK ------------------------------ */
@@ -124,12 +130,12 @@ class Todo extends VuexModule {
   /* ------------------------------- DELETE TASK ------------------------------ */
   @Action
   async deleteTask(id: string) {
-    const task = this.todos[id];
+    const task = this.todos[id] as ITodo;
     this.DELETE_TASK(id);
     const response = await TodoRepository.DeleteTodo({ id });
     if (response.errors?.length != 0) {
       console.log("error");
-      this.ADD_TASK(task);
+      this.addTaskById(task);
       return;
     }
   }
