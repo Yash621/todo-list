@@ -22,7 +22,7 @@ export type Scalars = {
 export type Mutation = {
   __typename?: "Mutation";
   createTodo: Todo;
-  updateOne: Todo;
+  updateOne: Array<Todo>;
   delete: Todo;
   deleteAll: Scalars["Float"];
   deleteMany: Scalars["Float"];
@@ -117,7 +117,9 @@ export type DeleteOneMutation = { __typename?: "Mutation" } & {
 export type FindAllQueryVariables = Exact<{ [key: string]: never }>;
 
 export type FindAllQuery = { __typename?: "Query" } & {
-  findAll: Array<{ __typename?: "Todo" } & Pick<Todo, "task" | "isCompleted">>;
+  findAll: Array<
+    { __typename?: "Todo" } & Pick<Todo, "task" | "isCompleted" | "id">
+  >;
 };
 
 export type FindOneByIdQueryVariables = Exact<{
@@ -133,9 +135,8 @@ export type UpdateOneMutationVariables = Exact<{
 }>;
 
 export type UpdateOneMutation = { __typename?: "Mutation" } & {
-  updateOne: { __typename?: "Todo" } & Pick<
-    Todo,
-    "id" | "isCompleted" | "task"
+  updateOne: Array<
+    { __typename?: "Todo" } & Pick<Todo, "id" | "isCompleted" | "task">
   >;
 };
 
@@ -327,6 +328,7 @@ export const FindAllDocument = gql`
     findAll {
       task
       isCompleted
+      id
     }
   }
 `;

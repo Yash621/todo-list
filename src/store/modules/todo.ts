@@ -9,7 +9,6 @@ import {
 } from "vuex-module-decorators";
 import store from "@/store";
 import { MODULE_NAMES } from "./constants";
-import { fun } from "@/utils/str-to-num-hash";
 import { TodoRepository } from "./repo";
 
 Vue.use(Vuex);
@@ -34,20 +33,43 @@ class Todo extends VuexModule {
   }
 
   /* ----------------------------- CUSTOM GETTERS ----------------------------- */
-  get todoData() {
-    const data = new Array<{
-      task: string;
-      isCompleted: boolean;
-      id: string;
-    }>();
-    for (const key of this.keys) {
-      data.push({
-        task: this.todos[key].task,
-        isCompleted: this.todos[key].isCompleted,
-        id: key,
-      });
-    }
-    return data;
+  get todoState() {
+    return async () => {
+      const data = new Array<{
+        task: string;
+        isCompleted: boolean;
+        id: string;
+      }>();
+      for (const key of this.keys) {
+        data.push({
+          task: this.todos[key].task,
+          isCompleted: this.todos[key].isCompleted,
+          id: key,
+        });
+      }
+      return data;
+    };
+  }
+
+  get todoFromApi() {
+    console.log("hello my getter");
+    return async () => {
+      const data = new Array<{
+        task: string;
+        isCompleted: boolean;
+        id: string;
+      }>();
+      const queries = await TodoRepository.findAll();
+      console.log(queries);
+      for (const entry of queries.data.findAll) {
+        data.push({
+          task: entry.task,
+          isCompleted: entry.isCompleted,
+          id: entry.id,
+        });
+      }
+      return data;
+    };
   }
 
   /* -------------------------------------------------------------------------- */
@@ -126,7 +148,15 @@ class Todo extends VuexModule {
       return;
     }
   }
-
+  @Action
+  addTaskLocally(payload: Array<ITodo>) {
+    for (const data of payload) {
+      Vue.set(this.todos, data.id, {
+        task: data.task,
+        isCompleted: data.isCompleted,
+      });
+    }
+  }
   /* ------------------------------- DELETE TASK ------------------------------ */
   @Action
   async deleteTask(id: string) {

@@ -25,7 +25,13 @@
 
 <script lang="ts">
 import Todo from "@/store/modules/todo";
-import { ref, computed, defineComponent } from "@vue/composition-api";
+import {
+  ref,
+  computed,
+  defineComponent,
+  onMounted,
+} from "@vue/composition-api";
+import { TodoRepository } from "@/store/modules/repo";
 
 export default defineComponent({
   setup() {
@@ -33,7 +39,6 @@ export default defineComponent({
 
     // DATA
     const msg = ref(""); // Primitives - String, Number, Array
-
     // Computed
     const tasks = computed(() => Todo.todoData);
 
@@ -63,7 +68,15 @@ export default defineComponent({
         id: payload.id,
       });
     }
+    async function init() {
+      await TodoRepository.findAll();
+      console.log("normie matt bann bhai");
+      const data = await Todo.todoFromApi();
+      console.log(data);
+      Todo.addTaskLocally(data);
+    }
 
+    onMounted(init);
     return { msg, tasks, isRed, addTask, deleteTask, updateTask };
   },
 });

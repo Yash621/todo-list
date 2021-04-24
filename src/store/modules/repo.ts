@@ -6,7 +6,9 @@ import {
   DeleteOneMutation,
   DeleteOneMutationVariables,
   FindAllDocument,
+  FindAllQuery,
   FindOneByIdDocument,
+  FindOneByIdQuery,
   FindOneByIdQueryVariables,
   UpdateOneDocument,
   UpdateOneMutation,
@@ -14,16 +16,18 @@ import {
 } from "@/generated/graphql";
 import { apolloProvider } from "@/main";
 
-const yash = apolloProvider.defaultClient;
+const yash = apolloProvider;
 
 export class TodoRepository {
-  static findAll() {
-    return yash.query({
+  static async findAll() {
+    const data = await yash.query<FindAllQuery>({
       query: FindAllDocument,
     });
+    console.log(data);
+    return data;
   }
   static findOneById(params: FindOneByIdQueryVariables) {
-    return yash.query({
+    return yash.query<FindOneByIdQuery>({
       query: FindOneByIdDocument,
       variables: { ...params },
     });
@@ -38,7 +42,7 @@ export class TodoRepository {
     return yash.mutate<DeleteOneMutation>({
       mutation: DeleteOneDocument,
       variables: {
-        id: params,
+        ...params,
       },
     });
   }

@@ -2,5 +2,6 @@ query findAll {
   findAll {
     task
     isCompleted
+    id
   }
 }
