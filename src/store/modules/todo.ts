@@ -10,6 +10,7 @@ import {
 import store from "@/store";
 import { MODULE_NAMES } from "./constants";
 import { TodoRepository } from "./repo";
+import { responsePathAsArray } from "graphql";
 
 Vue.use(Vuex);
 
@@ -34,7 +35,7 @@ class Todo extends VuexModule {
 
   /* ----------------------------- CUSTOM GETTERS ----------------------------- */
   get todoState() {
-    return async () => {
+    return () => {
       const data = new Array<{
         task: string;
         isCompleted: boolean;
@@ -111,8 +112,7 @@ class Todo extends VuexModule {
   @Action
   async addTask(payload: { task: string; isCompleted: boolean }) {
     const response = await TodoRepository.createTodo({ payload: payload });
-    //TODO: handle errors
-    if (response.data)
+    if (response.data?.createTodo.isCompleted == false)
       this.ADD_TASK({
         id: response.data?.createTodo.id.toString(),
         task: payload.task,

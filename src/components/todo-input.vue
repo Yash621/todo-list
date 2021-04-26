@@ -31,7 +31,6 @@ import {
   defineComponent,
   onMounted,
 } from "@vue/composition-api";
-import { TodoRepository } from "@/store/modules/repo";
 
 export default defineComponent({
   setup() {
@@ -40,7 +39,7 @@ export default defineComponent({
     // DATA
     const msg = ref(""); // Primitives - String, Number, Array
     // Computed
-    const tasks = computed(() => Todo.todoState());
+    const tasks = computed(() => Todo.todoState);
 
     // Methods
     function isRed() {
@@ -53,7 +52,6 @@ export default defineComponent({
     function addTask() {
       Todo.addTask({ task: msg.value, isCompleted: false });
     }
-
     function deleteTask(id: string) {
       Todo.deleteTask(id);
     }
@@ -70,7 +68,6 @@ export default defineComponent({
     }
     async function init() {
       const data = await Todo.todoFromApi();
-      console.log(data);
       Todo.addTaskLocally(data);
     }
 
