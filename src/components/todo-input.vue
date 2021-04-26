@@ -41,7 +41,7 @@ export default defineComponent({
     // DATA
     const msg = ref(""); // Primitives - String, Number, Array
     // Computed
-    const tasks = computed(() => Todo.todoState());
+    const tasks = computed(() => Todo.todoState);
 
     // Methods
     function isRed() {
@@ -74,7 +74,7 @@ export default defineComponent({
     }
 
     onMounted(init);
-    return { msg, tasks, isRed, addTask, deleteTask, updateTask, init };
+    return { msg, tasks, isRed, addTask, deleteTask, updateTask };
   },
 });
 </script>

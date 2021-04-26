@@ -10,7 +10,6 @@ import {
 import store from "@/store";
 import { MODULE_NAMES } from "./constants";
 import { TodoRepository } from "./repo";
-import { responsePathAsArray } from "graphql";
 
 Vue.use(Vuex);
 
@@ -22,35 +21,27 @@ export type ITodo = {
 
 @Module({ dynamic: true, namespaced: true, name: MODULE_NAMES.todo, store })
 class Todo extends VuexModule {
-  private todos = Object.create({
-    "1": {
-      task: "john-weak ko ghoomne jana hai bina ghar walo ki bakchodi ke!!",
-      isCompleted: false,
-    },
-  });
+  private todos = Object.create({});
 
+  /* ----------------------------- CUSTOM GETTERS ----------------------------- */
   get keys() {
     return Object.keys(this.todos);
   }
 
-  /* ----------------------------- CUSTOM GETTERS ----------------------------- */
   get todoState() {
-    return async () => {
-      const data = new Array<{
-        task: string;
-        isCompleted: boolean;
-        id: string;
-      }>();
-      for (const key of this.keys) {
-        data.push({
-          task: this.todos[key].task,
-          isCompleted: this.todos[key].isCompleted,
-          id: key,
-        });
-      }
-      console.log("kj;ksafdj;kljfd");
-      return data;
-    };
+    const data = new Array<{
+      task: string;
+      isCompleted: boolean;
+      id: string;
+    }>();
+    for (const key of this.keys) {
+      data.push({
+        task: this.todos[key].task,
+        isCompleted: this.todos[key].isCompleted,
+        id: key,
+      });
+    }
+    return data;
   }
 
   get todoFromApi() {
@@ -61,7 +52,6 @@ class Todo extends VuexModule {
         id: string;
       }>();
       const queries = await TodoRepository.findAll();
-      console.log(queries);
       for (const entry of queries.data.findAll) {
         data.push({
           task: entry.task,
@@ -113,9 +103,9 @@ class Todo extends VuexModule {
   @Action
   async addTask(payload: { task: string; isCompleted: boolean }) {
     const response = await TodoRepository.createTodo({ payload: payload });
-    if (response.data?.createTodo.isCompleted == false)
+    if (response.data)
       this.ADD_TASK({
-        id: response.data?.createTodo.id.toString(),
+        id: response.data.createTodo.id,
         task: payload.task,
       });
   }
@@ -148,6 +138,7 @@ class Todo extends VuexModule {
       return;
     }
   }
+
   @Action
   addTaskLocally(payload: Array<ITodo>) {
     for (const data of payload) {
@@ -157,6 +148,7 @@ class Todo extends VuexModule {
       });
     }
   }
+
   /* ------------------------------- DELETE TASK ------------------------------ */
   @Action
   async deleteTask(id: string) {
