@@ -14,32 +14,28 @@ import {
   UpdateOneMutation,
   UpdateOneMutationVariables,
 } from "@/generated/graphql";
-import { apolloProvider } from "@/main";
-
-const yash = apolloProvider;
+import { apolloClient } from "@/main";
 
 export class TodoRepository {
   static async findAll() {
-    const data = await yash.query<FindAllQuery>({
+    return apolloClient.query<FindAllQuery>({
       query: FindAllDocument,
     });
-    console.log(data);
-    return data;
   }
   static findOneById(params: FindOneByIdQueryVariables) {
-    return yash.query<FindOneByIdQuery>({
+    return apolloClient.query<FindOneByIdQuery>({
       query: FindOneByIdDocument,
       variables: { ...params },
     });
   }
   static createTodo(params: CreateTodoMutationVariables) {
-    return yash.mutate<CreateTodoMutation>({
+    return apolloClient.mutate<CreateTodoMutation>({
       mutation: CreateTodoDocument,
       variables: { ...params },
     });
   }
   static DeleteTodo(params: DeleteOneMutationVariables) {
-    return yash.mutate<DeleteOneMutation>({
+    return apolloClient.mutate<DeleteOneMutation>({
       mutation: DeleteOneDocument,
       variables: {
         ...params,
@@ -47,7 +43,7 @@ export class TodoRepository {
     });
   }
   static updateTodo(params: UpdateOneMutationVariables) {
-    return yash.mutate<UpdateOneMutation>({
+    return apolloClient.mutate<UpdateOneMutation>({
       mutation: UpdateOneDocument,
       variables: {
         ...params,

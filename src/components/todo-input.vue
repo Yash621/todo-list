@@ -40,7 +40,7 @@ export default defineComponent({
     // DATA
     const msg = ref(""); // Primitives - String, Number, Array
     // Computed
-    const tasks = computed(() => Todo.todoData);
+    const tasks = computed(() => Todo.todoState());
 
     // Methods
     function isRed() {
@@ -69,8 +69,6 @@ export default defineComponent({
       });
     }
     async function init() {
-      await TodoRepository.findAll();
-      console.log("normie matt bann bhai");
       const data = await Todo.todoFromApi();
       console.log(data);
       Todo.addTaskLocally(data);

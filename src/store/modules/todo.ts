@@ -52,7 +52,6 @@ class Todo extends VuexModule {
   }
 
   get todoFromApi() {
-    console.log("hello my getter");
     return async () => {
       const data = new Array<{
         task: string;
