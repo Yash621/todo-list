@@ -35,7 +35,7 @@ class Todo extends VuexModule {
 
   /* ----------------------------- CUSTOM GETTERS ----------------------------- */
   get todoState() {
-    return () => {
+    return async () => {
       const data = new Array<{
         task: string;
         isCompleted: boolean;
@@ -48,6 +48,7 @@ class Todo extends VuexModule {
           id: key,
         });
       }
+      console.log("kj;ksafdj;kljfd");
       return data;
     };
   }
